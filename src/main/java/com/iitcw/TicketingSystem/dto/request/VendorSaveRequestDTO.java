@@ -1,27 +1,14 @@
-package com.iitcw.TicketingSystem.entity;
+package com.iitcw.TicketingSystem.dto.request;
 
-import javax.persistence.*;
-import java.util.Set;
-
-@Entity
-@Table(name = "Vendor")
-public class Vendor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "vendor_id",length = 10)
+public class VendorSaveRequestDTO {
     private int vendorID;
-
-    @Column(name = "vendor_name",length = 100,nullable = false)
     private String vendorName;
-
-    @Column(name = "vendor_email",length = 50,nullable = false)
     private String email;
-    @OneToMany(mappedBy = "Vendor")
-    private Set<Ticket> tickets;
-    public Vendor() {
+
+    public VendorSaveRequestDTO() {
     }
 
-    public Vendor(int vendorID, String vendorName, String email) {
+    public VendorSaveRequestDTO(int vendorID, String vendorName, String email) {
         this.setVendorID(vendorID);
         this.setVendorName(vendorName);
         this.setEmail(email);
