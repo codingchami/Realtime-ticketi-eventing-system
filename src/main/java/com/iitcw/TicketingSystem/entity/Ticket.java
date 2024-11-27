@@ -1,6 +1,7 @@
 package com.iitcw.TicketingSystem.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Ticket")
@@ -9,18 +10,30 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ticket_id",length = 10)
     private int ticketId;
+
     @Column(name = "ticket_name")
     private String ticketName;
 
-    public Ticket() {
-    }
+    @Column(name = "ticket_status")
+    private String ticketStatus;
+
     @ManyToOne
     @JoinColumn(name = "vendor_id",nullable = false)
     private Vendor vendor;
-    public Ticket(int ticketId, String ticketName) {
+    @OneToMany(mappedBy = "ticket")
+    private Set<TicketPurchase> ticketPurchases;
+
+    public Ticket() {
+    }
+
+    public Ticket(int ticketId, String ticketName, String ticketStatus, Vendor vendor, Set<TicketPurchase> ticketPurchases) {
         this.setTicketId(ticketId);
         this.setTicketName(ticketName);
+        this.setTicketStatus(ticketStatus);
+        this.setVendor(vendor);
+        this.setTicketPurchases(ticketPurchases);
     }
+
 
     public int getTicketId() {
         return ticketId;
@@ -36,5 +49,29 @@ public class Ticket {
 
     public void setTicketName(String ticketName) {
         this.ticketName = ticketName;
+    }
+
+    public String getTicketStatus() {
+        return ticketStatus;
+    }
+
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
+    }
+
+    public Vendor getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
+    }
+
+    public Set<TicketPurchase> getTicketPurchases() {
+        return ticketPurchases;
+    }
+
+    public void setTicketPurchases(Set<TicketPurchase> ticketPurchases) {
+        this.ticketPurchases = ticketPurchases;
     }
 }

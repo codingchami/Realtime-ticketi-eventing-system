@@ -1,6 +1,7 @@
 package com.iitcw.TicketingSystem.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Customer")
@@ -17,6 +18,9 @@ public class Customer {
     private String email;
     @Column(name = "contacts",length = 10,nullable = false)
     private String contacts;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<TicketPurchase> ticketPurchases;
 
     public Customer() {
     }

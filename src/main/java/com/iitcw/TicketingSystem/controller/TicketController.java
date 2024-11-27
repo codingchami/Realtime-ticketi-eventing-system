@@ -1,7 +1,10 @@
 package com.iitcw.TicketingSystem.controller;
 
-import com.iitcw.TicketingSystem.dto.request.TicketSaveRequestDTO;
+import com.iitcw.TicketingSystem.repo.TicketRepo;
 import com.iitcw.TicketingSystem.service.TicketService;
+//import com.iitcw.TicketingSystem.thread.Customerthread;
+import com.iitcw.TicketingSystem.thread.Customerthread;
+import com.iitcw.TicketingSystem.thread.TicketPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class TicketController {
 
     @Autowired
-    private TicketService ticketService;
+    private TicketRepo ticketRepo;
+
+
+    @Autowired
+    private TicketPool ticketPool;
 
     @PostMapping(
             path = "/ticket-purcahse",
@@ -21,7 +28,14 @@ public class TicketController {
     public String purchaseTicket(@RequestParam(name = "ticket_id")int ticket_id,
                                  @RequestParam(name = "customer_id") int customer_id){
 
-        String message = ticketService.purchaseTicket(ticket_id,customer_id);
-        return message;
+
+
+        // Create a new CustomerThread to handle ticket purchase
+        Customerthread customerThread = new Customerthread(customer_id,ticket_id) ;
+        Thread thread = new Thread(customerThread);
+        thread.start();  // Start the thread to simulate ticket purchase
+
+        return "Ticket purchase request is being processed.";
+
     }
 }

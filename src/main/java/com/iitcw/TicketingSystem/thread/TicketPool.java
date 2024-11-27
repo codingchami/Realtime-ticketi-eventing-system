@@ -1,11 +1,39 @@
 package com.iitcw.TicketingSystem.thread;
 
+import com.iitcw.TicketingSystem.dto.Systemconfigdto;
+import com.iitcw.TicketingSystem.entity.Ticket;
+import com.iitcw.TicketingSystem.repo.TicketRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class TicketPool {
 
-    public boolean addTicket(){
+    @Autowired
+    private TicketRepo ticketRepo;
+    @Autowired
+    private Systemconfigdto systemconfigdto;
 
+    public synchronized void addTicket(Ticket ticket){
+
+        if (ticketRepo.count() < systemconfigdto.getMaxTicketCapacity()) {
+            ticket.setTicketStatus("AVAILABLE");
+            ticketRepo.save(ticket);
+            System.out.println("Vendor added ticket with ID " + ticket.getTicketId() + " to the pool.");
+        } else {
+            System.out.println("Max ticket capacity reached. Cannot add more tickets.");
+        }
     }
-    public boolean removeTicket(){
 
+    public synchronized void removeTicket(int ticketId){
+
+        Ticket ticket = ticketRepo.findById(ticketId).orElse(null);
+        if (ticket != null) {
+            ticket.setTicketStatus("PURCHASED");
+            ticketRepo.save(ticket);
+            System.out.println("Ticket with ID " + ticketId + " purchased and removed from the pool.");
+        }
     }
 }
+
+
