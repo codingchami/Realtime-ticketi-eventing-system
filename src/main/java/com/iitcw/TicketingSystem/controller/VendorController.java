@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/v1/customer")
+@RequestMapping("api/v1/vendor")
 public class VendorController {
 
     @Autowired
@@ -17,5 +17,14 @@ public class VendorController {
     public String saveVendor(@RequestBody VendorSaveRequestDTO vendorSaveRequestDTO){
         String message = vendorService.saveVendor(vendorSaveRequestDTO);
         return message;
+    }
+
+
+    @PostMapping(path = "/start-vendor-thread/{vendorid}")
+    public String startVendorThread(@PathVariable("vendorid") int vendorId){
+
+        return vendorService.startVendor(vendorId);
+
+
     }
 }

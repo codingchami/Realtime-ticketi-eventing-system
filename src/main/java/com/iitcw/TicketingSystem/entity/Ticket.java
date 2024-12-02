@@ -7,7 +7,7 @@ import java.util.Set;
 @Table(name = "Ticket")
 public class Ticket {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ticket_id",length = 10)
     private int ticketId;
 
@@ -16,6 +16,8 @@ public class Ticket {
 
     @Column(name = "ticket_status")
     private String ticketStatus;
+    @Column(name = "ticket_price")
+    private double ticketPrice;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id",nullable = false)
@@ -30,6 +32,15 @@ public class Ticket {
         this.setTicketId(ticketId);
         this.setTicketName(ticketName);
         this.setTicketStatus(ticketStatus);
+        this.setVendor(vendor);
+        this.setTicketPurchases(ticketPurchases);
+    }
+
+    public Ticket(int ticketId, String ticketName, String ticketStatus, double ticketPrice, Vendor vendor, Set<TicketPurchase> ticketPurchases) {
+        this.setTicketId(ticketId);
+        this.setTicketName(ticketName);
+        this.setTicketStatus(ticketStatus);
+        this.setTicketPrice(ticketPrice);
         this.setVendor(vendor);
         this.setTicketPurchases(ticketPurchases);
     }
@@ -57,6 +68,14 @@ public class Ticket {
 
     public void setTicketStatus(String ticketStatus) {
         this.ticketStatus = ticketStatus;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     public Vendor getVendor() {

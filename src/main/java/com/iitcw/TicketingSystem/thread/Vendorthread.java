@@ -3,41 +3,65 @@ package com.iitcw.TicketingSystem.thread;
 import com.iitcw.TicketingSystem.dto.Systemconfigdto;
 import com.iitcw.TicketingSystem.entity.Ticket;
 import com.iitcw.TicketingSystem.repo.TicketRepo;
+import com.iitcw.TicketingSystem.entity.Vendor;
+import com.iitcw.TicketingSystem.repo.VendorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class Vendorthread implements Runnable{
 
-    @Autowired
+public class Vendorthread implements Runnable {
+
+
     private TicketRepo ticketRepo;
 
-    @Autowired
+
     private TicketPool ticketPool;
 
-    @Autowired
-    private Systemconfigdto systemconfigdto;
 
-    public Vendorthread(TicketPool ticketPool, Systemconfigdto systemconfigdto) {
+    private Systemconfigdto systemConfig;
+
+
+    private VendorRepo vendorRepo;
+    private int vendorId;
+
+    public Vendorthread(TicketRepo ticketRepo, TicketPool ticketPool, Systemconfigdto systemConfig, VendorRepo vendorRepo) {
+        this.ticketRepo = ticketRepo;
         this.ticketPool = ticketPool;
-        this.systemconfigdto = systemconfigdto;
+        this.systemConfig = systemConfig;
+        this.vendorRepo = vendorRepo;
+
     }
+
+    public Vendorthread(int vendorId) {
+        this.vendorId = vendorId;
+    }
+    //
+//
+//    public Vendorthread(int vendorId) {
+//        this.vendorId = vendorId;
+//    }
 
     @Override
     public void run() {
 
-        // Simulate the vendor adding tickets to the pool at the defined rate
-        for (int i = 0; i < systemconfigdto.getTotalNumberofTickets(); i++) {
-            Ticket ticket = new Ticket();
-            ticket.setTicketId(i + 1);  // Assign a unique ticket ID
-            ticket.setTicketName("Ticket " + (i + 1));
-            ticket.setTicketStatus("AVAILABLE");  // Initially set the status to AVAILABLE
+        Vendor vendor = vendorRepo.findById(vendorId).orElseThrow(() -> new RuntimeException("Vendor not found"));
 
-            // Add the ticket to the pool
-            ticketPool.addTicket(ticket);
+
+        int ticketCount = 0;
+        while (ticketCount < systemConfig.getMaxTicketCapacity()) {
+            Ticket ticket = new Ticket();
+            ticket.setTicketId(ticketCount + 1);
+            ticket.setTicketName("Ticket " + (ticketCount + 1));
+            ticket.setTicketPrice(340.00);
+            ticket.setTicketStatus("AVAILABLE");
+            ticket.setVendor(vendor);
+
+
+            ticketRepo.save(ticket);
+            ticketCount++;
 
             try {
-                Thread.sleep(systemconfigdto.getTicketReleaseRate());  // Wait before releasing next ticket
+                Thread.sleep(systemConfig.getTicketReleaseRate());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

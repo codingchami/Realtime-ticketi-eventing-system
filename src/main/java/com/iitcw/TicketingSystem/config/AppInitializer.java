@@ -19,7 +19,7 @@ public class AppInitializer {
         int totalTickets = input.nextInt();
         systemconfigdto.setTotalNumberofTickets(totalTickets);
 
-        System.out.println("Enter ticket relese rate(milliseconds): ");
+        System.out.println("Enter vendor ticket relese rate(milliseconds): ");
         int ticketRelease = input.nextInt();
         systemconfigdto.setTicketReleaseRate(ticketRelease);
 
@@ -30,7 +30,6 @@ public class AppInitializer {
         System.out.println("Enter MaxCapacity :");
         int maxCapacity = input.nextInt();
         systemconfigdto.setMaxTicketCapacity(maxCapacity);
-
 
 
         return systemconfigdto;

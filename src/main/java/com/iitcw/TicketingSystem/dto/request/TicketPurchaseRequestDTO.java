@@ -1,30 +1,20 @@
-package com.iitcw.TicketingSystem.entity;
+package com.iitcw.TicketingSystem.dto.request;
 
-import com.iitcw.TicketingSystem.repo.TicketRepo;
+import com.iitcw.TicketingSystem.entity.Customer;
+import com.iitcw.TicketingSystem.entity.Ticket;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name="ticket_purchase")
-public class TicketPurchase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "purchase_id",length = 10)
+public class TicketPurchaseRequestDTO {
     private int purchaseTicketID;
-    @Column(name = "purchase_date",nullable = false)
     private Date purchaseDate;
-    @ManyToOne
-    @JoinColumn(name = "customer_id",nullable = false)
     private Customer customer;
-    @ManyToOne
-    @JoinColumn(name = "ticket_id",nullable = false)
     private Ticket ticket;
 
-    public TicketPurchase() {
+    public TicketPurchaseRequestDTO() {
     }
 
-    public TicketPurchase(int purchaseTicketID, Date purchaseDate, Customer customer, Ticket ticket) {
+    public TicketPurchaseRequestDTO(int purchaseTicketID, Date purchaseDate, Customer customer, Ticket ticket) {
         this.purchaseTicketID = purchaseTicketID;
         this.purchaseDate = purchaseDate;
         this.customer = customer;

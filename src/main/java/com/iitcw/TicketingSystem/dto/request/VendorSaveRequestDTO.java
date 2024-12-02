@@ -5,13 +5,12 @@ public class VendorSaveRequestDTO {
     private String vendorName;
     private String email;
 
-    public VendorSaveRequestDTO() {
-    }
+    public VendorSaveRequestDTO() {}
 
     public VendorSaveRequestDTO(int vendorID, String vendorName, String email) {
-        this.setVendorID(vendorID);
-        this.setVendorName(vendorName);
-        this.setEmail(email);
+        this.vendorID = vendorID;
+        this.vendorName = vendorName;
+        this.email = email;
     }
 
     public int getVendorID() {
