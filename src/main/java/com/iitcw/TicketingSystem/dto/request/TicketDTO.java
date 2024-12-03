@@ -15,18 +15,18 @@ public class TicketDTO {
 
     private double ticketPrice;
 
-    private Vendor vendor;
+    private int vendorId;
 
     private Set<TicketPurchase> ticketPurchases;
 
     public TicketDTO() {
     }
 
-    public TicketDTO(String ticketName, String ticketStatus, double ticketPrice, Vendor vendor, Set<TicketPurchase> ticketPurchases) {
+    public TicketDTO(String ticketName, String ticketStatus, double ticketPrice, int vendorId, Set<TicketPurchase> ticketPurchases) {
         this.ticketName = ticketName;
         this.ticketStatus = ticketStatus;
         this.ticketPrice = ticketPrice;
-        this.vendor = vendor;
+        this.vendorId = vendorId;
         this.ticketPurchases = ticketPurchases;
     }
 
@@ -62,12 +62,12 @@ public class TicketDTO {
         this.ticketPrice = ticketPrice;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+    public int getVendorId() {
+        return vendorId;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setVendorId(int vendorId) {
+        this.vendorId = vendorId;
     }
 
     public Set<TicketPurchase> getTicketPurchases() {

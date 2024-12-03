@@ -3,50 +3,27 @@ package com.iitcw.TicketingSystem.thread;
 import com.iitcw.TicketingSystem.dto.Systemconfigdto;
 import com.iitcw.TicketingSystem.entity.Ticket;
 import com.iitcw.TicketingSystem.repo.TicketRepo;
-import com.iitcw.TicketingSystem.entity.Vendor;
 import com.iitcw.TicketingSystem.repo.VendorRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 
 public class Vendorthread implements Runnable {
 
+    private final TicketRepo ticketRepo;
+    private final VendorRepo vendorRepo;
+    private final Systemconfigdto systemConfig;
+    private final int vendorId;
 
-    private TicketRepo ticketRepo;
-
-
-    private TicketPool ticketPool;
-
-
-    private Systemconfigdto systemConfig;
-
-
-    private VendorRepo vendorRepo;
-    private int vendorId;
-
-    public Vendorthread(TicketRepo ticketRepo, TicketPool ticketPool, Systemconfigdto systemConfig, VendorRepo vendorRepo) {
-        this.ticketRepo = ticketRepo;
-        this.ticketPool = ticketPool;
-        this.systemConfig = systemConfig;
-        this.vendorRepo = vendorRepo;
-
-    }
-
-    public Vendorthread(int vendorId) {
+    public Vendorthread(int vendorId, TicketRepo ticketRepo, VendorRepo vendorRepo, Systemconfigdto systemConfig) {
         this.vendorId = vendorId;
+        this.ticketRepo = ticketRepo;
+        this.vendorRepo = vendorRepo;
+        this.systemConfig = systemConfig;
     }
-    //
-//
-//    public Vendorthread(int vendorId) {
-//        this.vendorId = vendorId;
-//    }
 
     @Override
     public void run() {
-
-        Vendor vendor = vendorRepo.findById(vendorId).orElseThrow(() -> new RuntimeException("Vendor not found"));
-
-
+        if (vendorId == 0) {
+            throw new RuntimeException("Vendor id not set");
+        }
         int ticketCount = 0;
         while (ticketCount < systemConfig.getMaxTicketCapacity()) {
             Ticket ticket = new Ticket();
@@ -54,8 +31,7 @@ public class Vendorthread implements Runnable {
             ticket.setTicketName("Ticket " + (ticketCount + 1));
             ticket.setTicketPrice(340.00);
             ticket.setTicketStatus("AVAILABLE");
-            ticket.setVendor(vendor);
-
+            ticket.setVendorId(vendorId);
 
             ticketRepo.save(ticket);
             ticketCount++;

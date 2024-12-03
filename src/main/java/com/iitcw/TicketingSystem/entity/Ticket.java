@@ -19,29 +19,21 @@ public class Ticket {
     @Column(name = "ticket_price")
     private double ticketPrice;
 
-    @ManyToOne
     @JoinColumn(name = "vendor_id",nullable = false)
-    private Vendor vendor;
+    private int vendorId;
     @OneToMany(mappedBy = "ticket")
     private Set<TicketPurchase> ticketPurchases;
 
     public Ticket() {
     }
 
-    public Ticket(int ticketId, String ticketName, String ticketStatus, Vendor vendor, Set<TicketPurchase> ticketPurchases) {
-        this.setTicketId(ticketId);
-        this.setTicketName(ticketName);
-        this.setTicketStatus(ticketStatus);
-        this.setVendor(vendor);
-        this.setTicketPurchases(ticketPurchases);
-    }
 
-    public Ticket(int ticketId, String ticketName, String ticketStatus, double ticketPrice, Vendor vendor, Set<TicketPurchase> ticketPurchases) {
+    public Ticket(int ticketId, String ticketName, String ticketStatus, double ticketPrice, int vendorId, Set<TicketPurchase> ticketPurchases) {
         this.setTicketId(ticketId);
         this.setTicketName(ticketName);
         this.setTicketStatus(ticketStatus);
         this.setTicketPrice(ticketPrice);
-        this.setVendor(vendor);
+        this.setVendorId(vendorId);
         this.setTicketPurchases(ticketPurchases);
     }
 
@@ -78,12 +70,12 @@ public class Ticket {
         this.ticketPrice = ticketPrice;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+    public int getVendorId() {
+        return vendorId;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setVendorId(int vendorId) {
+        this.vendorId = vendorId;
     }
 
     public Set<TicketPurchase> getTicketPurchases() {
@@ -94,3 +86,5 @@ public class Ticket {
         this.ticketPurchases = ticketPurchases;
     }
 }
+
+
