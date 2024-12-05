@@ -11,4 +11,5 @@ import java.util.Optional;
 @EnableJpaRepositories
 public interface TicketRepo extends JpaRepository<Ticket,Integer> {
 
+
 }

@@ -16,29 +16,21 @@ public class TicketPool {
     private Systemconfigdto systemconfigdto;
 
     public synchronized void addTicket(Ticket ticket){
-
-
-
-//        if (ticketRepo.count() < systemconfigdto.getMaxTicketCapacity()) {
-//            ticket.setTicketStatus("AVAILABLE");
-//            ticketRepo.save(ticket);
-//            System.out.println("Vendor added ticket with ID " + ticket.getTicketId() + " to the pool.");
-//        } else {
-//            System.out.println("Max ticket capacity reached. Cannot add more tickets.");
-//        }
+        if (ticket!=null) {
+            System.out.println("Vendor added ticket with ID " + ticket.getTicketId() + " to the pool.");
+        }if(ticketRepo.count() < systemconfigdto.getMaxTicketCapacity()) {
+            System.out.println("Max ticket capacity reached. Cannot add more tickets.");
+        }
     }
 
     public synchronized void removeTicket(int ticketId){
-
-
-
-
-//        Ticket ticket = ticketRepo.findById(ticketId).orElse(null);
-//        if (ticket != null) {
-//            ticket.setTicketStatus("PURCHASED");
-//            ticketRepo.save(ticket);
-//            System.out.println("Ticket with ID " + ticketId + " purchased and removed from the pool.");
-//        }
+        Ticket ticket = ticketRepo.findById(ticketId).orElse(null);
+        if (ticket != null) {
+            ticket.setTicketStatus("PURCHASED");
+            ticketRepo.save(ticket);
+            System.out.println("=============================================================");
+            System.out.println("Ticket with ID " + ticketId + " purchased and removed from the pool.");
+        }
     }
 }
 

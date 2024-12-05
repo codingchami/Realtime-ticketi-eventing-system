@@ -23,6 +23,7 @@ public class Customer {
     private Set<TicketPurchase> ticketPurchases;
 
     public Customer() {
+
     }
 
     public Customer(int customerID, String customerName, String email, String contacts) {

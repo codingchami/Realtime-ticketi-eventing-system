@@ -11,13 +11,17 @@ public class Vendorthread implements Runnable {
     private final VendorRepo vendorRepo;
     private final Systemconfigdto systemConfig;
     private final int vendorId;
+    private final TicketPool ticketPool;
 
-    public Vendorthread(int vendorId, TicketRepo ticketRepo, VendorRepo vendorRepo, Systemconfigdto systemConfig) {
+    public Vendorthread(int vendorId, TicketRepo ticketRepo, VendorRepo vendorRepo, Systemconfigdto systemConfig,TicketPool ticketPool) {
         this.vendorId = vendorId;
         this.ticketRepo = ticketRepo;
         this.vendorRepo = vendorRepo;
         this.systemConfig = systemConfig;
+        this.ticketPool = ticketPool;
     }
+
+
 
     @Override
     public void run() {
@@ -34,6 +38,7 @@ public class Vendorthread implements Runnable {
             ticket.setVendorId(vendorId);
 
             ticketRepo.save(ticket);
+            ticketPool.addTicket(ticket);
             ticketCount++;
 
             try {
