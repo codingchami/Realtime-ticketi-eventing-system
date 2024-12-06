@@ -1,6 +1,7 @@
 package com.iitcw.TicketingSystem.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Customer {
     private String contacts;
 
     @OneToMany(mappedBy = "customer")
-    private Set<TicketPurchase> ticketPurchases;
+    private List<TicketPurchase> ticketPurchases;
 
     public Customer() {
 

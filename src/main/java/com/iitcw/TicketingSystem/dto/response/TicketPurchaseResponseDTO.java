@@ -1,24 +1,24 @@
-package com.iitcw.TicketingSystem.dto.request;
+package com.iitcw.TicketingSystem.dto.response;
 
 import com.iitcw.TicketingSystem.entity.Customer;
 import com.iitcw.TicketingSystem.entity.Ticket;
 
 import java.util.Date;
 
-public class TicketPurchaseRequestDTO {
+public class TicketPurchaseResponseDTO {
     private int purchaseTicketID;
     private Date purchaseDate;
     private Customer customer;
     private Ticket ticket;
 
-    public TicketPurchaseRequestDTO() {
+    public TicketPurchaseResponseDTO() {
     }
 
-    public TicketPurchaseRequestDTO(int purchaseTicketID, Date purchaseDate, Customer customer, Ticket ticket) {
-        this.purchaseTicketID = purchaseTicketID;
-        this.purchaseDate = purchaseDate;
-        this.customer = customer;
-        this.ticket = ticket;
+    public TicketPurchaseResponseDTO(int purchaseTicketID, Date purchaseDate, Customer customer, Ticket ticket) {
+        this.setPurchaseTicketID(purchaseTicketID);
+        this.setPurchaseDate(purchaseDate);
+        this.setCustomer(customer);
+        this.setTicket(ticket);
     }
 
     public int getPurchaseTicketID() {

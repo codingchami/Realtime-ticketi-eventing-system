@@ -1,12 +1,14 @@
 package com.iitcw.TicketingSystem.thread;
 
 import com.iitcw.TicketingSystem.dto.Systemconfigdto;
-import com.iitcw.TicketingSystem.dto.request.TicketPurchaseRequestDTO;
+import com.iitcw.TicketingSystem.entity.Customer;
 import com.iitcw.TicketingSystem.entity.Ticket;
 import com.iitcw.TicketingSystem.entity.TicketPurchase;
+import com.iitcw.TicketingSystem.repo.CustomerRepo;
+import com.iitcw.TicketingSystem.repo.TicketPurchaseRepo;
 import com.iitcw.TicketingSystem.repo.TicketRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 
 public class Customerthread implements Runnable{
@@ -16,13 +18,17 @@ public class Customerthread implements Runnable{
 
     private final TicketPool ticketPool;
     private final Systemconfigdto systemConfig;
+    private final TicketPurchaseRepo ticketPurchaseRepo;
+    private final CustomerRepo customerRepo;
 
-    public Customerthread(int customerId, int ticketId, TicketRepo ticketRepo, TicketPool ticketPool, Systemconfigdto systemConfig) {
+    public Customerthread(int customerId, int ticketId, TicketRepo ticketRepo, TicketPool ticketPool, Systemconfigdto systemConfig, TicketPurchaseRepo ticketPurchaseRepo,CustomerRepo customerRepo) {
         this.customerId = customerId;
         this.ticketId = ticketId;
         this.ticketRepo = ticketRepo;
         this.ticketPool = ticketPool;
         this.systemConfig = systemConfig;
+        this.ticketPurchaseRepo = ticketPurchaseRepo;
+        this.customerRepo = customerRepo;
     }
 
     @Override
@@ -42,6 +48,7 @@ public class Customerthread implements Runnable{
         }
     }
 
+
     private String purchaseTicket(int customerId,int ticketId) {
         System.out.println("===========================================");
         System.out.println("Searching for ticket with ID: " + ticketId);
@@ -55,6 +62,21 @@ public class Customerthread implements Runnable{
         if (!"AVAILABLE".equals(ticket.getTicketStatus())) {
             return "Ticket is not available for purchase.";
         }
+
+        // Fetch the customer by ID (you should have a CustomerRepo for this)
+        Customer customer = customerRepo.findById(customerId).orElse(null);
+        if (customer == null) {
+            return "Customer not found.";
+        }
+
+        TicketPurchase ticketPurchase = new TicketPurchase();
+
+        ticketPurchase.setPurchaseDate(new Date());
+        ticketPurchase.setCustomer(customer);
+        ticketPurchase.setTicket(ticket);
+
+        // Save the ticket purchase details to the database
+        ticketPurchaseRepo.save(ticketPurchase);
 
         ticketPool.removeTicket(ticketId);
 

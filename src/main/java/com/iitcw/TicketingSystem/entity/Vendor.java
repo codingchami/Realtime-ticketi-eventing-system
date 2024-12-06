@@ -16,7 +16,7 @@ public class Vendor {
 
     @Column(name = "vendor_email",length = 50,nullable = false)
     private String email;
-//    @OneToMany(mappedBy = "vendor")
+//        @OneToMany(mappedBy = "vendor")
 //    private Set<Ticket> tickets;
     public Vendor() {
     }
