@@ -1,15 +1,19 @@
 package com.iitcw.TicketingSystem.controller;
 
 import com.iitcw.TicketingSystem.dto.Systemconfigdto;
+import com.iitcw.TicketingSystem.dto.response.AllTicketDeatailsResponseDTO;
 import com.iitcw.TicketingSystem.dto.response.TicketPurchaseResponseDTO;
 import com.iitcw.TicketingSystem.entity.TicketPurchase;
 import com.iitcw.TicketingSystem.repo.CustomerRepo;
 import com.iitcw.TicketingSystem.repo.TicketPurchaseRepo;
 import com.iitcw.TicketingSystem.repo.TicketRepo;
 //import com.iitcw.TicketingSystem.thread.Customerthread;
+import com.iitcw.TicketingSystem.service.TicketPurchaseService;
+import com.iitcw.TicketingSystem.service.TicketService;
 import com.iitcw.TicketingSystem.thread.Customerthread;
 import com.iitcw.TicketingSystem.thread.TicketPool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("api/v1/ticket")
 public class TicketController {
 
@@ -37,6 +41,12 @@ public class TicketController {
 
     @Autowired
     private CustomerRepo customerRepo;
+
+    @Autowired
+    private TicketPurchaseService ticketPurchaseService;
+
+    @Autowired
+    private TicketService ticketService;
 
     private TicketPurchaseResponseDTO ticketPurchaseResponseDTO;
 
@@ -56,15 +66,29 @@ public class TicketController {
         Customerthread customerThread = new Customerthread(ticket_id,customer_id,ticketRepo,ticketPool,systemConfig,ticketPurchaseRepo,customerRepo);
         executorService.execute(customerThread);
 
-//        Thread thread = new Thread(customerThread);
-//        thread.start();  // Start the thread to simulate ticket purchase
-
         return "Ticket purchase request is being processed.";
 
     }
 
     @GetMapping("/get-all-purchase-tickets")
     public List<TicketPurchaseResponseDTO> getAllPurchaseTickets() {
-
+        List<TicketPurchaseResponseDTO> dtoList = ticketPurchaseService.getAllPurchaseTickets();
+        return dtoList;
     }
+
+    @GetMapping(
+            path = "/get-all-tickets-by-status",
+            params = "status"
+    )
+    public List<AllTicketDeatailsResponseDTO>getAllTicketsByState(@RequestParam(value ="status") String ticketStatus){
+        List<AllTicketDeatailsResponseDTO> dtoList =ticketService.getAllTicketsByStatus(ticketStatus);
+        return dtoList;
+    }
+
+//    @GetMapping("/get-all-purchase-tickets")
+//    public ResponseEntity<List<TicketPurchaseResponseDTO>> getAllPurchaseTickets() {
+//        List<TicketPurchaseResponseDTO> tickets = ticketPurchaseService.getAllPurchaseTickets();
+//        return ResponseEntity.ok(tickets);
+//    }
+
 }

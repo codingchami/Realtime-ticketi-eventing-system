@@ -7,7 +7,7 @@ import java.util.Set;
 @Table(name = "Vendor")
 public class Vendor {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vendor_id",length = 10)
     private int vendorID;
 

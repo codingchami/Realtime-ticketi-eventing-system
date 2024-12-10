@@ -6,7 +6,6 @@ import com.iitcw.TicketingSystem.repo.TicketRepo;
 import com.iitcw.TicketingSystem.repo.VendorRepo;
 
 public class Vendorthread implements Runnable {
-
     private final TicketRepo ticketRepo;
     private final VendorRepo vendorRepo;
     private final Systemconfigdto systemConfig;
@@ -28,23 +27,40 @@ public class Vendorthread implements Runnable {
         if (vendorId == 0) {
             throw new RuntimeException("Vendor id not set");
         }
+
         int ticketCount = 0;
-        while (ticketCount < systemConfig.getMaxTicketCapacity()) {
-            Ticket ticket = new Ticket();
-            ticket.setTicketId(ticketCount + 1);
-            ticket.setTicketName("Ticket " + (ticketCount + 1));
-            ticket.setTicketPrice(340.00);
-            ticket.setTicketStatus("AVAILABLE");
-            ticket.setVendorId(vendorId);
 
-            ticketRepo.save(ticket);
-            ticketPool.addTicket(ticket);
-            ticketCount++;
+        while (true) {
+            synchronized (ticketPool) {
+                if (ticketRepo.count() >= systemConfig.getTotalNumberofTickets()) {
+                    System.out.println("All tickets for the event have been released.");
+                    break;
+                }
 
-            try {
-                Thread.sleep(systemConfig.getTicketReleaseRate());
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                if (ticketCount >= systemConfig.getMaxTicketCapacity()) {
+                    System.out.println("Vendor " + vendorId + " reached maximum ticket release capacity.");
+                    break;
+                }
+
+                Ticket ticket = new Ticket();
+                ticket.setTicketName("Ticket " + (ticketRepo.count() + 1));
+                ticket.setTicketPrice(340.00);
+                ticket.setTicketStatus("AVAILABLE");
+                ticket.setVendorId(vendorId);
+
+                ticketRepo.save(ticket);
+                ticketPool.addTicket(ticket);
+
+                System.out.println("Vendor " + vendorId + " released ticket: " + ticket.getTicketName());
+
+                ticketCount++;
+
+                try {
+                    Thread.sleep(systemConfig.getTicketReleaseRate());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
             }
         }
     }

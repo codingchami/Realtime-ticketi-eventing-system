@@ -16,11 +16,15 @@ public class TicketPool {
     private Systemconfigdto systemconfigdto;
 
     public synchronized void addTicket(Ticket ticket){
-        if (ticket!=null) {
+//        if (ticket!=null) {
+//            System.out.println("Vendor added ticket with ID " + ticket.getTicketId() + " to the pool.");
+//        }if(ticketRepo.count() < systemconfigdto.getMaxTicketCapacity()) {
+//            System.out.println("Max ticket capacity reached. Cannot add more tickets.");
+//        }
+        if (ticket != null) {
             System.out.println("Vendor added ticket with ID " + ticket.getTicketId() + " to the pool.");
-        }if(ticketRepo.count() < systemconfigdto.getMaxTicketCapacity()) {
-            System.out.println("Max ticket capacity reached. Cannot add more tickets.");
         }
+
     }
 
     public synchronized void removeTicket(int ticketId){
